@@ -1,0 +1,6 @@
+trame: # Default app under /index.html
+  www_modules:
+    - mobile_medical_patient_review.module
+  app: mobile-medical-patient-review
+mobile-medical-patient-review: # /mobile-medical-patient-review.html
+  app: mobile-medical-patient-review
