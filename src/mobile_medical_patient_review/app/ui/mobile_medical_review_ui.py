@@ -1,7 +1,8 @@
 from trame_server import Server
 from trame_slicer.core import LayoutManager
 
-from .main_menu_selector_ui import MainMenuSelectorUI
+from .comments_ui import CommentsUI
+from .menus.main_menu_selector_ui import MainMenuSelectorUI
 from .mobile_viewer_layout import MobileViewerLayout
 from .single_touch_functions_ui import SingleTouchFunctionsUI
 
@@ -17,6 +18,9 @@ class MobileMedicalReviewUI:
             
             with self.layout.left_drawer:
                 self.main_menu_selector_ui = MainMenuSelectorUI()
+
+            with self.layout.right_drawer:
+                self.comments_ui = CommentsUI()
             
             with self.layout.content:
                 layout_manager.initialize_layout_grid(self.layout)

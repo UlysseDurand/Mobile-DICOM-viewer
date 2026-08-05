@@ -10,7 +10,9 @@ dependencies = [
     "trame-vuetify",
     "trame-vtk",
     "vtk",
-    "trame-slicer[standalone]"
+    "trame-slicer[standalone]",
+    "trame-rca @ file:///home/ulysse-durand/git/trame-rca",
+    "vtk-fixed @ file:///home/ulysse-durand/git/vtk-fixed"
 ]
 requires-python = ">=3.9"
 readme = "README.rst"
@@ -108,3 +110,7 @@ mypy-init-return = true
 "tests/**" = ["T20"]
 "noxfile.py" = ["T20"]
 "src/**" = ["SIM117"]
+
+[[tool.uv.index]]
+name = "vtk-sdk"
+url = "https://vtk.org/files/wheel-sdks/"
