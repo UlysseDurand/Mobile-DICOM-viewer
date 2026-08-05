@@ -38,6 +38,7 @@ class MobileMedicalReviewLogic:
             self._annotation_tool_menu_logic.set_single_touch_function(
                 interactor.set_single_touch_function_none
             )
+            interactor.set_deselect_markup_callback(self._annotation_tool_menu_logic.deselect_tool)
 
     def set_ui(self, ui: MobileMedicalReviewUI) -> None:
         self._volume_menu_logic.set_ui(ui.main_menu_selector_ui.get_menu_ui(VolumeMenuUI))

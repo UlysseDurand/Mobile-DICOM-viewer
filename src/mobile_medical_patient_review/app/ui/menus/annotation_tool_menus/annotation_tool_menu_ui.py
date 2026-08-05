@@ -43,9 +43,22 @@ class AnnotationToolMenuUI(BaseMenuSelectorUI):
     def __init__(self) -> None:
         super().__init__(AnnotationToolMenuState, menus)
 
+    def deselect(self) -> None:
+        self.data.selected = None
+
+    def _is_no_tool_selected(self) -> tuple[str,]:
+        return self._state_equal(self.name.selected, None)
+
     def _build_ui(self, items: list[type[BaseMenuUI]]) -> None:
         with self:
             with VBtnGroup():
+                with VBtn(
+                    icon=True,
+                    click=self.deselect,
+                    active=self._is_no_tool_selected(),
+                ):
+                    VIcon("mdi-cursor-default")
+                    VTooltip("No Markup Tool", activator="parent", location="top")
                 for menu in items:
                     with VBtn(
                         icon=True,

@@ -53,6 +53,9 @@ class AnnotationToolMenuLogic(BaseLogic[AnnotationToolMenuState]):
     def set_single_touch_function(self, callback: Callable[[], None]) -> None:
         self._single_touch_function_cb = callback
 
+    def deselect_tool(self) -> None:
+        self.data.selected = None
+
     def set_ui(self, tool_menu: AnnotationToolMenuUI, comments_ui: CommentsUI) -> None:
         self.bind_changes({self.name.selected: self._on_tool_changed})
         tool_menu.clear_clicked.connect(self._on_clear)

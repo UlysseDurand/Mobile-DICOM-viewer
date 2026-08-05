@@ -12,6 +12,8 @@ from ..ui.single_touch_functions_ui import (
 from .base.base_custom_vselect_logic import BaseCustomVSelectLogic
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from trame_server import Server
     from trame_slicer.views import SliceView
     from vtk import vtkRenderWindowInteractor
@@ -21,6 +23,9 @@ class MyInteractor(BaseCustomVSelectLogic[SingleTouchFunctionsEnum]):
     def __init__(self, server: Server, slicer_app: SlicerApp, slice_view: SliceView):
         super().__init__(server, slicer_app, SingleTouchFunctionsState)
         self._slice_view = slice_view
+        self._deselect_markup_cb: Callable[[], None] | None = None
+
+        self.bind_changes({self.name.selected: self._on_single_touch_function_changed})
 
         self._is_dragging = False
         self._first_drag = (0, 0)
@@ -149,3 +154,10 @@ class MyInteractor(BaseCustomVSelectLogic[SingleTouchFunctionsEnum]):
 
     def set_single_touch_function_none(self) -> None:
         self.data.selected = SingleTouchFunctionsEnum.NONE
+
+    def set_deselect_markup_callback(self, callback: Callable[[], None]) -> None:
+        self._deselect_markup_cb = callback
+
+    def _on_single_touch_function_changed(self, selected: SingleTouchFunctionsEnum) -> None:
+        if selected != SingleTouchFunctionsEnum.NONE and self._deselect_markup_cb is not None:
+            self._deselect_markup_cb()
