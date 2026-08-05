@@ -9,7 +9,12 @@ from ...ui.menus.annotation_tool_menus.annotation_tool_menu_ui import (
     AnnotationToolMenuState,
 )
 
+MARKUP_DISPLAY_GLYPH_SCALE = 10.0
+MARKUP_DISPLAY_TEXT_SCALE = 5.0
+
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from trame_server import Server
     from trame_slicer.core import SlicerApp
 
@@ -43,6 +48,10 @@ class AnnotationToolMenuLogic(BaseLogic[AnnotationToolMenuState]):
     def __init__(self, server: Server, slicer_app: SlicerApp):
         super().__init__(server, slicer_app, AnnotationToolMenuState)
         self._markup_nodes: list = []
+        self._single_touch_function_cb: Callable[[], None] | None = None
+
+    def set_single_touch_function(self, callback: Callable[[], None]) -> None:
+        self._single_touch_function_cb = callback
 
     def set_ui(self, tool_menu: AnnotationToolMenuUI, comments_ui: CommentsUI) -> None:
         self.bind_changes({self.name.selected: self._on_tool_changed})
@@ -58,7 +67,17 @@ class AnnotationToolMenuLogic(BaseLogic[AnnotationToolMenuState]):
         if node is not None:
             self._markup_nodes.append(node)
             self._slicer_app.markups_logic.place_node(node, persistent)
+            self._set_markup_display_properties(node)
             self._add_annotation(node)
+            if self._single_touch_function_cb is not None:
+                self._single_touch_function_cb()
+
+    def _set_markup_display_properties(self, node: Any) -> None:
+        if node.GetDisplayNode() is None:
+            node.CreateDefaultDisplayNodes()
+        display = node.GetDisplayNode()
+        display.SetGlyphScale(MARKUP_DISPLAY_GLYPH_SCALE)
+        display.SetTextScale(MARKUP_DISPLAY_TEXT_SCALE)
 
     def _add_annotation(self, node: Any) -> None:
         label, icon = self._NODE_META.get(node.GetClassName(), ("Annotation", "mdi-tag"))

@@ -145,4 +145,7 @@ class MyInteractor(BaseCustomVSelectLogic[SingleTouchFunctionsEnum]):
 
     @property
     def interactor(self) -> vtkRenderWindowInteractor:
-        return self._slice_view.interactor()    
+        return self._slice_view.interactor()
+
+    def set_single_touch_function_none(self) -> None:
+        self.data.selected = SingleTouchFunctionsEnum.NONE

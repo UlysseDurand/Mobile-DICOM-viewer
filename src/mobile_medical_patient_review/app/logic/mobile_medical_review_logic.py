@@ -34,6 +34,11 @@ class MobileMedicalReviewLogic:
         for view in self._slicer_app.view_manager.get_slice_views():
             self._interactor_observers[view.get_view_node_id()] = MyInteractor(server, slicer_app, view)
 
+        for interactor in self._interactor_observers.values():
+            self._annotation_tool_menu_logic.set_single_touch_function(
+                interactor.set_single_touch_function_none
+            )
+
     def set_ui(self, ui: MobileMedicalReviewUI) -> None:
         self._volume_menu_logic.set_ui(ui.main_menu_selector_ui.get_menu_ui(VolumeMenuUI))
         annotator_menu = ui.main_menu_selector_ui.get_menu_ui(AnnotatorMenuUI)
