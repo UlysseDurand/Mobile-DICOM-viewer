@@ -45,6 +45,7 @@ class MyInteractor(BaseCustomVSelectLogic[SingleTouchFunctionsEnum]):
             ["MouseMoveEvent", self.on_drag],
             ["LeftButtonPressEvent", self.on_button_press],
             ["LeftButtonReleaseEvent", self.on_button_release],
+            ["RightButtonPressEvent", self.on_right_button_press],
             ["StartPanEvent",self.on_start_pan],
             ["PanEvent", self.on_pan],
             ["EndPanEvent", self.on_end_pan],
@@ -71,6 +72,10 @@ class MyInteractor(BaseCustomVSelectLogic[SingleTouchFunctionsEnum]):
 
     def on_button_release(self, _obj: Any, _event: Any) -> None:
         self._is_dragging = False
+
+    def on_right_button_press(self, _obj: Any, _event: Any) -> None:
+        if self._deselect_markup_cb is not None:
+            self._deselect_markup_cb()
 
     def on_drag(self, _obj: Any, _event: Any) -> None:
         x, y = self.interactor.GetEventPosition()
