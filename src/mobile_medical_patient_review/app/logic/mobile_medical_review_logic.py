@@ -42,8 +42,7 @@ class MobileMedicalReviewLogic:
 
     def set_ui(self, ui: MobileMedicalReviewUI) -> None:
         self._volume_menu_logic.set_ui(ui.main_menu_selector_ui.get_menu_ui(VolumeMenuUI))
-        annotator_menu = ui.main_menu_selector_ui.get_menu_ui(AnnotatorMenuUI)
-        self._annotation_tool_menu_logic.set_ui(annotator_menu.tool_menu, ui.comments_ui)
+        self._annotation_tool_menu_logic.set_ui(ui.main_menu_selector_ui.get_menu_ui(AnnotatorMenuUI).tool_menu)
 
     @property
     def layout_manager(self) -> LayoutManager:

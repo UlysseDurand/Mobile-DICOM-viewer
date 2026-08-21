@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING, Any, ClassVar
 from trame_slicer.app.logic import BaseLogic
 
 from ...ui.menus.annotation_tool_menus.annotation_tool_menu_ui import (
-    AnnotationComment,
     AnnotationToolMenuState,
 )
 
@@ -18,7 +17,6 @@ if TYPE_CHECKING:
     from trame_server import Server
     from trame_slicer.core import SlicerApp
 
-    from ...ui.comments_ui import CommentsUI
     from ...ui.menus.annotation_tool_menus.annotation_tool_menu_ui import (
         AnnotationToolMenuUI,
     )
@@ -57,10 +55,9 @@ class AnnotationToolMenuLogic(BaseLogic[AnnotationToolMenuState]):
         if self.data.selected is not None:
             self.data.selected = None
 
-    def set_ui(self, tool_menu: AnnotationToolMenuUI, comments_ui: CommentsUI) -> None:
+    def set_ui(self, tool_menu: AnnotationToolMenuUI) -> None:
         self.bind_changes({self.name.selected: self._on_tool_changed})
         tool_menu.clear_clicked.connect(self._on_clear)
-        comments_ui.comment_changed.connect(self._on_comment_changed)
 
     def _on_tool_changed(self, selected: str | None) -> None:
         self._slicer_app.markups_logic.disable_place_mode()
@@ -72,7 +69,6 @@ class AnnotationToolMenuLogic(BaseLogic[AnnotationToolMenuState]):
             self._markup_nodes.append(node)
             self._slicer_app.markups_logic.place_node(node, persistent)
             self._set_markup_display_properties(node)
-            self._add_annotation(node)
             if self._single_touch_function_cb is not None:
                 self._single_touch_function_cb()
 
@@ -82,21 +78,6 @@ class AnnotationToolMenuLogic(BaseLogic[AnnotationToolMenuState]):
         display = node.GetDisplayNode()
         display.SetGlyphScale(MARKUP_DISPLAY_GLYPH_SCALE)
         display.SetTextScale(MARKUP_DISPLAY_TEXT_SCALE)
-
-    def _add_annotation(self, node: Any) -> None:
-        label, icon = self._NODE_META.get(node.GetClassName(), ("Annotation", "mdi-tag"))
-        annotation = AnnotationComment(
-            node_id=node.GetID(),
-            name=node.GetName(),
-            type_label=label,
-            icon=icon,
-        )
-        self.data.annotations = [*self.data.annotations, annotation]
-
-    def _on_comment_changed(self, node_id: str, comment: str) -> None:
-        node = self._slicer_app.scene.GetNodeByID(node_id)
-        if node is not None:
-            node.SetDescription(comment)
 
     def _on_clear(self) -> None:
         self._slicer_app.markups_logic.disable_place_mode()

@@ -51,7 +51,9 @@ class MyInteractor(BaseCustomVSelectLogic[SingleTouchFunctionsEnum]):
             ["EndPanEvent", self.on_end_pan],
             ["StartRotateEvent", self.on_start_rotate],
             ["RotateEvent", self.on_rotate],
-            ["EndRotateEvent", self.on_end_rotate]
+            ["EndRotateEvent", self.on_end_rotate],
+            ["TapEvent", self.on_tap],
+            ["LongTapEvent", self.on_long_tap]
         ]
 
         for event, callback in interaction_mapping:
@@ -133,6 +135,13 @@ class MyInteractor(BaseCustomVSelectLogic[SingleTouchFunctionsEnum]):
 
     def on_end_rotate(self, _obj: Any, _event: Any) -> None:
         pass
+
+    def on_tap(self, _obj: Any, _events: Any) -> None:
+        pass
+
+    def on_long_tap(self, _obj: Any, _events: Any) -> None:
+        self.interactor.InvokeEvent("RightButtonPressEvent")
+        self.interactor.InvokeEvent("RightButtonReleaseEvent")
 
     def _translate(self, translation: tuple[float, float]) -> None:
         dx, dy = translation

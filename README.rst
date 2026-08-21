@@ -18,22 +18,14 @@ checkouts (see below), so it must be installed from a local clone.
 The application requires Python 3.12 (or <=3.13): ``slicer-core`` does not
 ship wheels for newer Python versions.
 
-Local dependency checkouts (``file://`` paths in ``pyproject.toml``) must
+Local dependency checkouts (``@ file://`` paths in ``pyproject.toml``) must
 exist at:
 
-* ``/home/ulysse-durand/git/trame-rca``
-* ``/home/ulysse-durand/git/vtk-fixed``
-
-Run the application
-
-.. code-block:: console
-
-    mobile-medical-patient-review
-
-Then open ``http://localhost:8080/`` in a browser.
-
-Development setup
-----------------------------------------
+* ``/home/ulysse-durand/git/trame-rca`` (branch `custom` for trame-rca using vtk-fixed) 
+  
+* ``/home/ulysse-durand/git/vtk-fixed`` (for a vtk module that fixes handling of gesture events, Tap
+  and LongTap events, waiting for this to be merged in a vtk that Slicer and SlicerCore are built
+  with)
 
 We recommend using uv for setting up and managing a virtual environment for your development.
 
@@ -58,6 +50,13 @@ Build and install the Vue components
 This is only needed when you modify the ``vue-components/`` sources or
 package the application (the app itself runs fine without the Vue build).
 
+Run the application
+
+.. code-block:: console
+
+    mobile-medical-patient-review --host 0.0.0.0
+
+Then open ``http://localhost:8080/`` in a browser. (Or at ip:8080 from a mobile device)
 
 Docker
 ----------------------------------------
@@ -72,7 +71,6 @@ Sample data
 ----------------------------------------
 
 Sample DICOM volumes are in ``volumes/`` (``ct_chest_dcm/``, ``mr_head_dcm/``)
-and are stored with git LFS (see ``.gitattributes``).
 
 
 Professional Support

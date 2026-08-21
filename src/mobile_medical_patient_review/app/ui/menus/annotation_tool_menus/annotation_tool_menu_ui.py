@@ -25,17 +25,8 @@ menus = [
 ]
 
 @dataclass
-class AnnotationComment:
-    node_id: str = ""
-    name: str = ""
-    type_label: str = ""
-    icon: str = ""
-    comment: str = ""
-
-@dataclass
 class AnnotationToolMenuState(AbstractSelectState[type[BaseMenuUI]]):
     selected: str | None = None
-    annotations: list[AnnotationComment] = field(default_factory=list)
 
 class AnnotationToolMenuUI(BaseMenuSelectorUI):
     clear_clicked = Signal()
